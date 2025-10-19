@@ -17,6 +17,8 @@ This tool goes beyond simple identification by visualizing the exact point where
 🎥 ## Live Demo
 
 [A screenshot or GIF of the application in action]
+<img width="651" height="926" alt="Screenshot from 2025-10-19 10-47-28" src="https://github.com/user-attachments/assets/c0b94321-eceb-444c-b94d-c266ac91482e" />
+
 
 You can try out the live application here: `[Link to your deployed application on Hugging Face Spaces or other platform]`
 
