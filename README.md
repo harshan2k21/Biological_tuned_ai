@@ -95,6 +95,9 @@ Ensure you have a directory named dataset/flowers.
 
 Inside dataset/flowers, each subdirectory should be named after a species (e.g., rose, tulip, dandelion) and should contain the corresponding training images.
 
+other dataset such as animals,bacteria can be used 
+the one used in the model is sourced from: https://www.kaggle.com/datasets/l3llff/flowers
+json file to be modilfied as per the requirnment
 ### 5. Run the Full Pipeline
 You must run the Python scripts in the following order to train the model, create the necessary database files, and then launch the web server.
 
