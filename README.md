@@ -16,9 +16,11 @@ This tool goes beyond simple identification by visualizing the exact point where
 
 🎥 ## Live Demo
 
-[A screenshot or GIF of the application in action]
+<!-- [A screenshot or GIF of the application in action] -->
+<img width="651" height="926" alt="Screenshot from 2025-10-19 10-47-28" src="https://github.com/user-attachments/assets/c0b94321-eceb-444c-b94d-c266ac91482e" />
 
-You can try out the live application here: `[Link to your deployed application on Hugging Face Spaces or other platform]`
+
+<!-- You can try out the live application here: `[Link to your deployed application on Hugging Face Spaces or other platform]` -->
 
 🤔 ## How It Works
 
@@ -93,6 +95,9 @@ Ensure you have a directory named dataset/flowers.
 
 Inside dataset/flowers, each subdirectory should be named after a species (e.g., rose, tulip, dandelion) and should contain the corresponding training images.
 
+other dataset such as animals,bacteria can be used 
+the one used in the model is sourced from: https://www.kaggle.com/datasets/l3llff/flowers
+json file to be modilfied as per the requirnment
 ### 5. Run the Full Pipeline
 You must run the Python scripts in the following order to train the model, create the necessary database files, and then launch the web server.
 
