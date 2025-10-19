@@ -59,8 +59,8 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 First, clone the project from GitHub to your local machine:
 
-```bash
-git clone [https://github.com/your-username/your-repository-name.git](https://github.com/your-username/your-repository-name.git)
+
+git clone https://github.com/harshan2k21/Biological_tuned_ai
 cd your-repository-name
 
 
