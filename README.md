@@ -63,7 +63,6 @@ First, clone the project from GitHub to your local machine:
 git clone https://github.com/harshan2k21/Biological_tuned_ai
 cd your-repository-name
 
-```bash
 
 
 
@@ -114,6 +113,7 @@ Bash
 python3 app.py
 6. Use the Application
 Open the index.html file in your web browser. You can now upload two images and click "Compare Organisms" to see the results.
+```bash
 
 📁 ## File Structure
 
