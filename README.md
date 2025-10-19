@@ -67,7 +67,7 @@ cd your-repository-name
 
 
 
-2. Set Up the Python Environment
+###2. Set Up the Python Environment
 Create and activate a virtual environment to manage the project's dependencies.
 
 Bash
@@ -80,20 +80,20 @@ source .venv/bin/activate
 
 # On Windows, use:
 # .venv\Scripts\activate
-3. Install Dependencies
+###3. Install Dependencies
 Install all the required Python modules using the requirements.txt file.
 
 Bash
 
 pip install -r requirements.txt
-4. Prepare the Dataset
+###4. Prepare the Dataset
 This model was trained on a specific dataset structure.
 
 Ensure you have a directory named dataset/flowers.
 
 Inside dataset/flowers, each subdirectory should be named after a species (e.g., rose, tulip, dandelion) and should contain the corresponding training images.
 
-5. Run the Full Pipeline
+###5. Run the Full Pipeline
 You must run the Python scripts in the following order to train the model, create the necessary database files, and then launch the web server.
 
 Step A: Train the Model This will fine-tune the ResNet model on your dataset and create the biologically_tuned_model.pth file. This can take a long time, especially without a GPU.
@@ -111,7 +111,7 @@ Step C: Launch the Web Server This starts the Flask server. It will be accessibl
 Bash
 
 python3 app.py
-6. Use the Application
+###6. Use the Application
 Open the index.html file in your web browser. You can now upload two images and click "Compare Organisms" to see the results.
 ```bash
 
