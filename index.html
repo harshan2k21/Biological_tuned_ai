@@ -1,0 +1,805 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxonomic Comparison Tool</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1a202c;
+            margin-bottom: 2rem;
+        }
+        .upload-area {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .upload-box {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            flex: 1;
+            min-width: 300px;
+        }
+        .upload-box img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .upload-box label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        input[type="file"] { display: none; }
+        .custom-file-upload {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+        .custom-file-upload:hover { background-color: #4338ca; }
+        .file-name {
+            margin-top: 0.5rem;
+            color: #718096;
+            font-style: italic;
+        }
+        .compare-button-container { text-align: center; }
+        button {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+        button:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+        #results { display: none; margin-top: 3rem; }
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f7f7f7;
+            border-radius: 12px;
+        }
+        .comparison-header h2 { margin: 0; font-size: 1.5rem; color: #2d3748; }
+        .comparison-summary {
+            text-align: center;
+            margin: -1rem auto 2.5rem;
+            max-width: 800px;
+            color: #4a5568;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        th, td {
+            padding: 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 700;
+            color: #4a5568;
+            text-transform: capitalize;
+        }
+        td { color: #2d3748; }
+        tr:last-child td { border-bottom: none; }
+        td:first-child { font-weight: 600; }
+        .mismatch { background-color: #fffbeb; }
+        .info-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .info-card {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .info-card h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #111827;
+        }
+        .info-card p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .info-card .detail {
+            margin-bottom: 0.5rem;
+        }
+        .info-card .detail strong {
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Taxonomic Comparison Tool</h1>
+
+        <div class="upload-area">
+            <div class="upload-box">
+                <img id="preview1" src="https://placehold.co/100x100/e2e8f0/a0aec0?text=Image+1" alt="Image 1 Preview">
+                <label for="file1" class="custom-file-upload">Choose Image 1</label>
+                <input type="file" id="file1" accept="image/*">
+                <div class="file-name" id="fileName1">No file chosen</div>
+            </div>
+            <div class="upload-box">
+                <img id="preview2" src="https://placehold.co/100x100/e2e8f0/a0aec0?text=Image+2" alt="Image 2 Preview">
+                <label for="file2" class="custom-file-upload">Choose Image 2</label>
+                <input type="file" id="file2" accept="image/*">
+                <div class="file-name" id="fileName2">No file chosen</div>
+            </div>
+        </div>
+
+        <div class="compare-button-container">
+            <button onclick="compareImages()">Compare Organisms</button>
+        </div>
+
+        <div id="results">
+            <div class="comparison-header">
+                <h2 id="divergencePoint"></h2>
+            </div>
+            <div class="comparison-summary">
+                <p id="summaryText"></p>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th id="speciesName1">Image 1</th>
+                        <th id="speciesName2">Image 2</th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonTableBody"></tbody>
+            </table>
+            
+            <div class="info-cards-container">
+                <div class="info-card" id="infoCard1"></div>
+                <div class="info-card" id="infoCard2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('file1').addEventListener('change', (e) => handleFileChange(e, 'preview1', 'fileName1'));
+        document.getElementById('file2').addEventListener('change', (e) => handleFileChange(e, 'preview2', 'fileName2'));
+
+        function handleFileChange(event, previewId, fileNameId) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById(previewId).src = URL.createObjectURL(file);
+                document.getElementById(fileNameId).textContent = file.name;
+            }
+        }
+
+        async function compareImages() {
+            const file1 = document.getElementById('file1').files[0];
+            const file2 = document.getElementById('file2').files[0];
+            if (!file1 || !file2) {
+                alert("Please select two images to compare.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file1', file1);
+            formData.append('file2', file2);
+            
+            const button = document.querySelector('button');
+            button.textContent = 'Analyzing...';
+            button.disabled = true;
+            document.getElementById('results').style.display = 'none';
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/compare', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Data received from server:", data);
+                displayResults(data);
+
+            } catch (error) {
+                console.error("Error during API call:", error);
+                alert("An error occurred. Check the browser console for details.");
+            } finally {
+                button.textContent = 'Compare Organisms';
+                button.disabled = false;
+            }
+        }
+
+        function displayResults(data) {
+            const { 
+                image1_taxa, image2_taxa, divergence_point, 
+                image1_species, image2_species 
+            } = data;
+
+            document.getElementById('divergencePoint').textContent = divergence_point;
+            
+            populateTable(image1_taxa, image2_taxa);
+            populateInfoCard('infoCard1', image1_taxa, image1_species);
+            populateInfoCard('infoCard2', image2_taxa, image2_species);
+            
+            generateSummaryText(data);
+
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function populateTable(taxa1, taxa2) {
+            const tableBody = document.getElementById('comparisonTableBody');
+            tableBody.innerHTML = '';
+
+            document.getElementById('speciesName1').textContent = taxa1.common_name || 'Image 1';
+            document.getElementById('speciesName2').textContent = taxa2.common_name || 'Image 2';
+            
+            const ranks = ["domain", "kingdom", "phylum", "class", "order", "family", "genus", "species"];
+            let divergenceFound = false;
+
+            ranks.forEach(rank => {
+                const row = document.createElement('tr');
+                const val1 = taxa1[rank] || '---';
+                const val2 = taxa2[rank] || '---';
+                
+                row.innerHTML = `
+                    <td>${rank}</td>
+                    <td>${val1}</td>
+                    <td>${val2}</td>
+                `;
+
+                if (val1 !== val2 && !divergenceFound) {
+                    row.classList.add('mismatch');
+                    divergenceFound = true;
+                }
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function populateInfoCard(cardId, taxa, speciesId) {
+            const card = document.getElementById(cardId);
+            const title = taxa.common_name || `${taxa.genus || ''} ${taxa.species || ''}`.trim();
+
+            card.innerHTML = `
+                <h3>${title || 'Unknown Species'}</h3>
+                <p>${taxa.description || 'No description available.'}</p>
+                <div class="detail">
+                    <strong>Bloom Season:</strong> ${taxa.bloom_season || 'Unknown'}
+                </div>
+                <div class="detail">
+                    <strong>Fun Fact:</strong> ${taxa.fun_fact || '---'}
+                </div>
+            `;
+        }
+        
+        function generateSummaryText(data) {
+            const summaryEl = document.getElementById('summaryText');
+            const { image1_taxa, image2_taxa, divergence_point } = data;
+            const name1 = image1_taxa.common_name || 'the first organism';
+            const name2 = image2_taxa.common_name || 'the second organism';
+
+            if (divergence_point.includes("Same Species")) {
+                 summaryEl.textContent = `The analysis indicates that both images show the same species, ${name1}.`;
+            } else if (divergence_point.includes("genus")) {
+                 summaryEl.textContent = `While both organisms belong to the same family (${image1_taxa.family}), ${name1} and ${name2} diverge at the Genus level. This indicates a close evolutionary relationship.`;
+            } else if (divergence_point.includes("family")) {
+                 summaryEl.textContent = `Both organisms are in the same order (${image1_taxa.order}), but they belong to different families. ${name1} is in the ${image1_taxa.family} family, while ${name2} is in the ${image2_taxa.family} family.`;
+            } else {
+                 summaryEl.textContent = `The comparison shows that ${name1} and ${name2} are not closely related, diverging at a high taxonomic rank.`;
+            }
+        }
+
+    </script>
+</body>
+</html>
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxonomic Comparison Tool</title>
+    <!-- Include Chart.js library for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1a202c;
+            margin-bottom: 2rem;
+        }
+        .upload-area {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .upload-box {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            flex: 1;
+            min-width: 300px;
+        }
+        .upload-box img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .upload-box label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+        input[type="file"] { display: none; }
+        .custom-file-upload {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+        .custom-file-upload:hover { background-color: #4338ca; }
+        .file-name {
+            margin-top: 0.5rem;
+            color: #718096;
+            font-style: italic;
+        }
+        .compare-button-container { text-align: center; }
+        button {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+        button:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+        #results { display: none; margin-top: 3rem; }
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f7f7f7;
+            border-radius: 12px;
+        }
+        .comparison-header h2 { margin: 0; font-size: 1.5rem; color: #2d3748; }
+        .comparison-summary {
+            text-align: center;
+            margin: -1rem auto 2.5rem;
+            max-width: 800px;
+            color: #4a5568;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .visuals-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+        .score-container {
+            text-align: center;
+            padding: 2rem;
+            background-color: #f8fafc;
+            border-radius: 12px;
+        }
+        .score-container .score-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+        .score-container .score-value {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+        .chart-container {
+            padding: 1rem;
+            height: 250px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 3rem;
+        }
+        th, td {
+            padding: 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 700;
+            color: #4a5568;
+            text-transform: capitalize;
+        }
+        td { color: #2d3748; }
+        tr:last-child td { border-bottom: none; }
+        td:first-child { font-weight: 600; }
+        .mismatch { background-color: #fffbeb; }
+        .info-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .info-card {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .info-card h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            color: #111827;
+        }
+        .info-card p {
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .info-card .detail {
+            margin-bottom: 0.5rem;
+        }
+        .info-card .detail strong {
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Taxonomic Comparison Tool</h1>
+
+        <div class="upload-area">
+            <div class="upload-box">
+                <img id="preview1" src="https://placehold.co/100x100/e2e8f0/a0aec0?text=Image+1" alt="Image 1 Preview">
+                <label for="file1" class="custom-file-upload">Choose Image 1</label>
+                <input type="file" id="file1" accept="image/*">
+                <div class="file-name" id="fileName1">No file chosen</div>
+            </div>
+            <div class="upload-box">
+                <img id="preview2" src="https://placehold.co/100x100/e2e8f0/a0aec0?text=Image+2" alt="Image 2 Preview">
+                <label for="file2" class="custom-file-upload">Choose Image 2</label>
+                <input type="file" id="file2" accept="image/*">
+                <div class="file-name" id="fileName2">No file chosen</div>
+            </div>
+        </div>
+
+        <div class="compare-button-container">
+            <button onclick="compareImages()">Compare Organisms</button>
+        </div>
+
+        <div id="results">
+            <div class="comparison-header">
+                <h2 id="divergencePoint"></h2>
+            </div>
+            <div class="comparison-summary">
+                <p id="summaryText"></p>
+            </div>
+            
+            <div class="visuals-grid">
+                <div class="score-container">
+                    <div class="score-label">Overall Similarity Score</div>
+                    <div class="score-value" id="similarityScore">0%</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="confidenceChart"></canvas>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th id="speciesName1">Image 1</th>
+                        <th id="speciesName2">Image 2</th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonTableBody"></tbody>
+            </table>
+            
+            <div class="info-cards-container">
+                <div class="info-card" id="infoCard1"></div>
+                <div class="info-card" id="infoCard2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let confidenceChartInstance = null;
+
+        document.getElementById('file1').addEventListener('change', (e) => handleFileChange(e, 'preview1', 'fileName1'));
+        document.getElementById('file2').addEventListener('change', (e) => handleFileChange(e, 'preview2', 'fileName2'));
+
+        function handleFileChange(event, previewId, fileNameId) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById(previewId).src = URL.createObjectURL(file);
+                document.getElementById(fileNameId).textContent = file.name;
+            }
+        }
+
+        async function compareImages() {
+            const file1 = document.getElementById('file1').files[0];
+            const file2 = document.getElementById('file2').files[0];
+            if (!file1 || !file2) {
+                alert("Please select two images to compare.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file1', file1);
+            formData.append('file2', file2);
+            
+            const button = document.querySelector('button');
+            button.textContent = 'Analyzing...';
+            button.disabled = true;
+            document.getElementById('results').style.display = 'none';
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/compare', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Data received from server:", data);
+                displayResults(data);
+
+            } catch (error) {
+                console.error("Error during API call:", error);
+                alert("An error occurred. Check the browser console for details.");
+            } finally {
+                button.textContent = 'Compare Organisms';
+                button.disabled = false;
+            }
+        }
+
+        function displayResults(data) {
+            const { 
+                image1_taxa, image2_taxa, divergence_point, 
+                image1_species, image2_species,
+                similarity_score, confidence_score1, confidence_score2
+            } = data;
+
+            document.getElementById('divergencePoint').textContent = divergence_point;
+            
+            // CORRECTED: Use a fallback value of 0 if similarity_score is missing
+            const score = similarity_score || 0;
+            document.getElementById('similarityScore').textContent = `${score}%`;
+            
+            // CORRECTED: Use fallback values for confidence scores as well
+            const conf1 = confidence_score1 || 0;
+            const conf2 = confidence_score2 || 0;
+            renderConfidenceChart(
+                image1_taxa.common_name || 'Image 1', conf1, 
+                image2_taxa.common_name || 'Image 2', conf2
+            );
+
+            populateTable(image1_taxa, image2_taxa);
+            populateInfoCard('infoCard1', image1_taxa, image1_species);
+            populateInfoCard('infoCard2', image2_taxa, image2_species);
+            generateSummaryText(data);
+
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function renderConfidenceChart(label1, data1, label2, data2) {
+            const ctx = document.getElementById('confidenceChart').getContext('2d');
+            
+            if (confidenceChartInstance) {
+                confidenceChartInstance.destroy();
+            }
+
+            confidenceChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [label1, label2],
+                    datasets: [{
+                        label: 'Model Confidence',
+                        data: [data1, data2],
+                        backgroundColor: [
+                            'rgba(79, 70, 229, 0.8)',
+                            'rgba(16, 185, 129, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(79, 70, 229, 1)',
+                            'rgba(16, 185, 129, 1)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'AI Confidence Score for Each Image'
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateTable(taxa1, taxa2) {
+            const tableBody = document.getElementById('comparisonTableBody');
+            tableBody.innerHTML = '';
+
+            document.getElementById('speciesName1').textContent = taxa1.common_name || 'Image 1';
+            document.getElementById('speciesName2').textContent = taxa2.common_name || 'Image 2';
+            
+            const ranks = ["domain", "kingdom", "phylum", "class", "order", "family", "genus", "species"];
+            let divergenceFound = false;
+
+            ranks.forEach(rank => {
+                const row = document.createElement('tr');
+                const val1 = taxa1[rank] || '---';
+                const val2 = taxa2[rank] || '---';
+                
+                row.innerHTML = `
+                    <td>${rank}</td>
+                    <td>${val1}</td>
+                    <td>${val2}</td>
+                `;
+
+                if (val1 !== val2 && !divergenceFound) {
+                    row.classList.add('mismatch');
+                    divergenceFound = true;
+                }
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function populateInfoCard(cardId, taxa, speciesId) {
+            const card = document.getElementById(cardId);
+            const title = taxa.common_name || `${taxa.genus || ''} ${taxa.species || ''}`.trim();
+
+            card.innerHTML = `
+                <h3>${title || 'Unknown Species'}</h3>
+                <p>${taxa.description || 'No description available.'}</p>
+                <div class="detail">
+                    <strong>Bloom Season:</strong> ${taxa.bloom_season || 'Unknown'}
+                </div>
+                <div class="detail">
+                    <strong>Fun Fact:</strong> ${taxa.fun_fact || '---'}
+                </div>
+            `;
+        }
+        
+        function generateSummaryText(data) {
+            const summaryEl = document.getElementById('summaryText');
+            const { image1_taxa, image2_taxa, divergence_point } = data;
+            const name1 = image1_taxa.common_name || 'the first organism';
+            const name2 = image2_taxa.common_name || 'the second organism';
+
+            if (divergence_point.includes("Same Species")) {
+                 summaryEl.textContent = `The analysis indicates that both images show the same species, ${name1}.`;
+            } else if (divergence_point.includes("genus")) {
+                 summaryEl.textContent = `While both organisms belong to the same family (${image1_taxa.family}), ${name1} and ${name2} diverge at the Genus level. This indicates a close evolutionary relationship.`;
+            } else if (divergence_point.includes("family")) {
+                 summaryEl.textContent = `Both organisms are in the same order (${image1_taxa.order}), but they belong to different families. ${name1} is in the ${image1_taxa.family} family, while ${name2} is in the ${image2_taxa.family} family.`;
+            } else {
+                 summaryEl.textContent = `The comparison shows that ${name1} and ${name2} are not closely related, diverging at a high taxonomic rank.`;
+            }
+        }
+
+    </script>
+</body>
+</html>
+
