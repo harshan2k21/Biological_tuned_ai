@@ -63,6 +63,8 @@ First, clone the project from GitHub to your local machine:
 git clone https://github.com/harshan2k21/Biological_tuned_ai
 cd your-repository-name
 
+```bash
+
 
 
 
